@@ -1,5 +1,5 @@
-screenX, screenY = love.graphics.getDimensions()
-font = love.graphics.newFont("assets/fonts/sharp-retro.ttf", 96, "mono")
+require 'constants'
+
 local moonshine = require 'moonshine'
 local flux = require 'flux'
 local shack = require 'shack'
@@ -34,7 +34,7 @@ function love.load()
   playerOne = {}
   playerOne.width = 10
   playerOne.height = 90
-  playerOne.y = screenY*.5 - playerOne.height*.5
+  playerOne.y = SCREEN_Y*.5 - playerOne.height*.5
   playerOne.x = 20
   playerOne.speed = 1200
   playerOne.score = 0
@@ -51,8 +51,8 @@ function love.load()
   playerTwo = {}
   playerTwo.width = 10
   playerTwo.height = 90
-  playerTwo.y = screenY*.5 - playerTwo.height*.5
-  playerTwo.x = screenX - playerTwo.width - 20
+  playerTwo.y = SCREEN_Y*.5 - playerTwo.height*.5
+  playerTwo.x = SCREEN_X - playerTwo.width - 20
   playerTwo.speed = 1200
   playerTwo.score = 0
 
@@ -71,8 +71,8 @@ function love.load()
   ball.speed = 120
   ball.dy = love.math.random(-240, 240)
   ball.dx = 120
-  ball.x = screenX*.5 - ball.width*.5
-  ball.y = screenY*.5 - ball.height*.5
+  ball.x = SCREEN_X*.5 - ball.width*.5
+  ball.y = SCREEN_Y*.5 - ball.height*.5
 
   ball.particles = love.graphics.newParticleSystem(particle, 100)
   ball.particles:setParticleLifetime(.1, .2)
@@ -110,7 +110,7 @@ function love.update(dt)
     playerOne.particles:setSpeed(800)
     playerOne.particles:start()
   elseif love.keyboard.isDown("z") then
-    playerOne.y = math.min(screenY - playerOne.height, playerOne.y + playerOne.speed * dt)
+    playerOne.y = math.min(SCREEN_Y - playerOne.height, playerOne.y + playerOne.speed * dt)
     playerOne.particles:setPosition(playerOne.x+playerOne.width*.5, playerOne.y+(dir == -1 and playerOne.height or 0))
     playerOne.particles:setDirection(3 * math.pi / 2)
     playerOne.particles:setSpeed(800)
@@ -126,7 +126,7 @@ function love.update(dt)
     playerTwo.particles:setSpeed(800)
     playerTwo.particles:start()
   elseif love.keyboard.isDown("m") then
-    playerTwo.y = math.min(screenY - playerTwo.height, playerTwo.y + playerTwo.speed * dt)
+    playerTwo.y = math.min(SCREEN_Y - playerTwo.height, playerTwo.y + playerTwo.speed * dt)
     playerTwo.particles:setPosition(playerTwo.x+playerTwo.width*.5, playerTwo.y+(dir == -1 and playerTwo.height or 0))
     playerTwo.particles:setDirection(3 * math.pi / 2)
     playerTwo.particles:setSpeed(800)
@@ -148,8 +148,8 @@ function love.update(dt)
     ball.dy = ball.dy * -1
   end
 
-  if ball.y + ball.height > screenY then
-    ball.y = screenY - ball.height
+  if ball.y + ball.height > SCREEN_Y then
+    ball.y = SCREEN_Y - ball.height
     ball.dy = ball.dy * -1
   end
 
@@ -179,16 +179,16 @@ function love.update(dt)
     shake = shake + 1
   end
 
-  if ball.x + ball.width > screenX then
+  if ball.x + ball.width > SCREEN_X then
     playerOne.score = playerOne.score + 1
-    score.particles:setPosition(screenX, ball.y)
+    score.particles:setPosition(SCREEN_X, ball.y)
     score.particles:setDirection(math.pi)
     score.particles:start()
     shack:setShake(25)
     ball.dy = love.math.random(-240, 240)
     ball.dx = 120
-    ball.x = screenX*.5 - ball.width*.5
-    ball.y = screenY*.5 - ball.height*.5
+    ball.x = SCREEN_X*.5 - ball.width*.5
+    ball.y = SCREEN_Y*.5 - ball.height*.5
     shake = 3
   end
 
@@ -200,8 +200,8 @@ function love.update(dt)
     shack:setShake(25)
     ball.dy = love.math.random(-240, 240)
     ball.dx = 120
-    ball.x = screenX*.5 - ball.width*.5
-    ball.y = screenY*.5 - ball.height*.5
+    ball.x = SCREEN_X*.5 - ball.width*.5
+    ball.y = SCREEN_Y*.5 - ball.height*.5
     shake = 3
   end
 end
@@ -217,17 +217,17 @@ function love.draw()
   shack:apply()
   crt(function()
     love.graphics.setColor(51 / 100, 124 / 100, 160 / 100, 0.1)
-    love.graphics.rectangle('fill', 0, 0, screenX, screenY)
+    love.graphics.rectangle('fill', 0, 0, SCREEN_X, SCREEN_Y)
 
     background(function()
       love.graphics.setColor(1, 1, 1, 1, 0.2)
 
-      love.graphics.setFont(font)
-      love.graphics.print(playerOne.score, screenX*.5 - font:getWidth(playerOne.score) - 60, 100)
-      love.graphics.print(playerTwo.score, screenX*.5 + 60, 100)
+      love.graphics.setFont(GAME_FONT)
+      love.graphics.print(playerOne.score, SCREEN_X*.5 - GAME_FONT:getWidth(playerOne.score) - 60, 100)
+      love.graphics.print(playerTwo.score, SCREEN_X*.5 + 60, 100)
 
-      for i = 5, screenY, 20 do
-        love.graphics.rectangle('fill', screenX*.5 - divider.width*.5, i, divider.width, divider.height)
+      for i = 5, SCREEN_Y, 20 do
+        love.graphics.rectangle('fill', SCREEN_X*.5 - divider.width*.5, i, divider.width, divider.height)
       end
 
       love.graphics.rectangle('fill', playerOne.x, playerOne.y, playerOne.width, playerOne.height)
