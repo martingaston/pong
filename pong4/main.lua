@@ -1,8 +1,5 @@
 require 'constants'
-
-local moonshine = require 'moonshine'
-local flux = require 'flux'
-local shack = require 'shack'
+require 'dependencies'
 
 function love.load()
   love.window.setTitle("PONG")
